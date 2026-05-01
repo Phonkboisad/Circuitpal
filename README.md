@@ -126,7 +126,7 @@ All user-configurable constants live in **`config.h`**:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/CircuitPal.git
+git clone https://github.com/Phonkboisad/CircuitPal.git
 cd CircuitPal
 ```
 
