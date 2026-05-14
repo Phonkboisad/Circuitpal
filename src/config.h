@@ -33,7 +33,7 @@
 #define DST_OFFSET    0
 
 // OpenWeatherMap
-#define OWM_API_KEY   "0c0e0736e86d537c4fb1b78d666ee969"
+#define OWM_API_KEY   "Your_API_KEY_HERE"
 #define OWM_CITY      "Chittagong"
 #define OWM_COUNTRY   "BD"
 #define OWM_URL       "http://api.openweathermap.org/data/2.5/weather?q=" OWM_CITY "," OWM_COUNTRY "&appid=" OWM_API_KEY "&units=metric"
