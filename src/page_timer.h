@@ -8,9 +8,9 @@
 
 // ─────────────────────────────────────────────
 //  CircuitPal — Timer Page (Count-up Stopwatch)
-//  Starts paused at 00:00
+//  Starts paused at 00:00; display MM:SS, then HH:MM from 1h onward
 //  Prev  → back to Home
-//  Next  → Resume / unpause timer
+//  Next  → Start / resume, or stop (freeze) while running
 //  Enter → Reset & pause at 00:00
 // ─────────────────────────────────────────────
 
@@ -37,10 +37,12 @@ void draw(Adafruit_SH1106G& display) {
 
   if (btn_prev())  { _exitReq = true; return; }
   if (btn_next())  {
-    // Start / resume
-    if (!_running) {
+    if (_running) {
+      _elapsed   = millis() - _startedAt;
+      _running   = false;
+    } else {
       _startedAt = millis() - _elapsed;
-      _running = true;
+      _running   = true;
     }
   }
   if (btn_enter()) {
@@ -56,8 +58,16 @@ void draw(Adafruit_SH1106G& display) {
   if (_running) _colonVis = true;
 
   uint32_t totalSec = _elapsed / 1000;
-  uint8_t  minutes  = (totalSec / 60) % 100;  // cap at 99:59
-  uint8_t  seconds  = totalSec % 60;
+  uint8_t left, right;
+  if (totalSec < 3600UL) {
+    left  = (uint8_t)(totalSec / 60);
+    right = (uint8_t)(totalSec % 60);
+  } else {
+    uint32_t h = totalSec / 3600UL;
+    if (h > 99UL) h = 99UL;
+    left  = (uint8_t)h;
+    right = (uint8_t)((totalSec % 3600UL) / 60);
+  }
 
   display.clearDisplay();
 
@@ -67,8 +77,8 @@ void draw(Adafruit_SH1106G& display) {
   display.setCursor(40, 2);
   display.print("TIMER");
 
-  // Draw clean digital timer (big, centered)
-  fc_render_clean(display, minutes, seconds, _colonVis, 14, 4);
+  // Big digits: MM:SS below 1h, HH:MM at/above 1h (seconds not shown then)
+  fc_render_clean(display, left, right, _colonVis, 14, 4);
 
   // Status bar
   display.setCursor(2, 56);

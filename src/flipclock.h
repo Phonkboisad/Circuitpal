@@ -116,4 +116,5 @@ static void fc_render_clean(Adafruit_SH1106G& display, uint8_t left, uint8_t rig
 
   display.setCursor(x, topY);
   display.print(buf);
+  display.setTextSize(1);  // callers often print a status line next; default font is size 1
 }

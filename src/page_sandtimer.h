@@ -53,11 +53,12 @@ static void _drawHourglass(Adafruit_SH1106G& display, int16_t x, int16_t y,
     display.drawFastHLine(x + 7 - halfW, y + 1 + row, halfW * 2, SH110X_WHITE);
   }
 
-  // Sand in bottom half (fills up as time runs)
+  // Sand in bottom half (fills up as time runs) — wide at bottom, narrow at neck
+  // (same taper as top, inverted; was row/10 which made a point at the bottom)
   uint8_t botFill = map(pct, 100, 0, 0, 10);
   for (uint8_t row = 0; row < botFill; row++) {
-    uint8_t hw = (uint8_t)(7.0f * ((float)row / 10.0f));
-    display.drawFastHLine(x + 7 - hw, y + 21 - row, hw * 2 + 1, SH110X_WHITE);
+    uint8_t halfW = (uint8_t)(7.0f * (1.0f - (float)row / 10.0f));
+    display.drawFastHLine(x + 7 - halfW, y + 21 - row, halfW * 2, SH110X_WHITE);
   }
 }
 

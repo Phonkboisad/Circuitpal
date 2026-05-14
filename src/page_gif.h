@@ -33,13 +33,23 @@ static void _drawSubMenu(Adafruit_SH1106G& display) {
   display.setCursor(46, 2);
   display.print("Gifs");
 
+  if (GIF_COUNT == 0) {
+    display.display();
+    return;
+  }
+
+  // Three visible rows: _sel-1, _sel, _sel+1 (wrap), same idea as PageHome
+  int16_t startY = 16;
+  int16_t itemH  = 14;
+  int16_t rowPitch = itemH + 3;
   int16_t itemW = 90;
   int16_t itemX = (SCREEN_WIDTH - itemW) / 2;
-  int16_t itemH = 14;
 
-  for (int8_t i = 0; i < GIF_COUNT; i++) {
-    int16_t y = 16 + i * (itemH + 3);
-    bool active = (i == _sel);
+  for (int8_t i = -1; i <= 1; i++) {
+    int8_t idx = (_sel + i + GIF_COUNT) % GIF_COUNT;
+    int16_t y  = startY + (i + 1) * rowPitch;
+    bool    active = (i == 0);
+
     if (active) {
       display.fillRoundRect(itemX, y, itemW, itemH, 4, SH110X_WHITE);
       display.setTextColor(SH110X_BLACK);
@@ -49,7 +59,16 @@ static void _drawSubMenu(Adafruit_SH1106G& display) {
     }
     display.setCursor(itemX + 6, y + 3);
     if (active) display.print("> ");
-    display.print(GIFS[i]->name);   // auto‑uses name from descriptor
+    display.print(GIFS[idx]->name);
+  }
+
+  int16_t dotX = SCREEN_WIDTH - 6;
+  for (uint8_t i = 0; i < GIF_COUNT; i++) {
+    int16_t dotY = 18 + (int16_t)i * ((SCREEN_HEIGHT - 18) / (int16_t)GIF_COUNT);
+    if (i == (uint8_t)_sel)
+      display.fillCircle(dotX, dotY, 2, SH110X_WHITE);
+    else
+      display.drawCircle(dotX, dotY, 2, SH110X_WHITE);
   }
 
   display.display();
