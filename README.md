@@ -34,7 +34,9 @@ CircuitPal is a self-contained embedded device that packs five useful applicatio
 | **Button 3 — ENTER** | GPIO 27 → GND (active-LOW, internal pull-up) |
 
 > All buttons use the ESP32's internal pull-up resistors — no external resistors required.
-
+---
+## Circuit Diagram
+**https://app.cirkitdesigner.com/project/1ef47c69-381d-40a2-bf71-bb7c1d757305**
 ---
 
 ## 🗂️ Project Structure
